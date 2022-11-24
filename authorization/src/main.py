@@ -2,17 +2,16 @@
 from flask import Flask
 # from db.init import init_db # doesn't work yet
 from gevent import monkey
+from gevent.pywsgi import WSGIServer
+from api.v1.user import bp_user
+
 monkey.patch_all()
 
-from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
-
-
-@app.route('/create-user')
-def create_user():
-    """Accept login and password here, post method"""
-    return 'Create user+'
+app.register_blueprint(bp_user)
+# for debug:
+print(app.url_map)
 
 
 def main():
