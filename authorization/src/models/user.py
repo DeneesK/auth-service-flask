@@ -1,9 +1,9 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
-from db.orm import engine as db
+from db.orm import db_engine as db
 
 
-class User(db.Model):
+class UserModel(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
