@@ -1,10 +1,18 @@
-FROM python:3.10
-WORKDIR /opt/app
+FROM python:3.10-alpine
 
-RUN pip install -r requirements.txt
+WORKDIR /app
+RUN addgroup -S app && adduser -S app app
 
-COPY api api
-COPY core core
-COPY db db
-COPY models models
-COPY services services
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+COPY ./requirements.txt /app
+RUN apk add -U --no-cache build-base && \
+ pip install -r /app/requirements.txt && \
+ pip install gunicorn && \
+ apk del build-base
+
+COPY ./src /app
+USER app
+CMD ["gunicorn", "--worker-class", "gevent", "wsgi:app"]
