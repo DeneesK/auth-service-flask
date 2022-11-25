@@ -1,8 +1,8 @@
 @startuml
 actor Client
 Client -> Service: access token
-database DB_Redis
-Service -> DB_Redis: Get all history
-DB_Redis -> Service: All history
+database DB_Postgres
+Service -> DB_Postgres: Get all history
+DB_Postgres -> Service: All history
 Service -> Client: The history.
 @enduml

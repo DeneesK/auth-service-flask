@@ -1,8 +1,8 @@
 @startuml
 actor Client
 Client -> Service: Login, password
-database DB_Redis
-Service -> DB_Redis: Login, encrypted password
-DB_Redis -> Service: If the user is not registered, register.
+database DB_Postgres
+Service -> DB_Postgres: Login, encrypted password
+DB_Postgres -> Service: If the user is not registered, register.
 Service -> Client: Session token.
 @enduml

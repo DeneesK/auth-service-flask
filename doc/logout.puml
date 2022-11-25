@@ -2,5 +2,5 @@
 actor Client
 Client -> Service: access token
 database DB_Redis
-Service -> DB_Redis: Mark token as expired.
+Service -> DB_Redis: Mark token as expired. Invalidate refresh token.
 @enduml
