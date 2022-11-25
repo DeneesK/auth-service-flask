@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  auth:
+    environment:
+      DEBUG: 1
+    volumes:
+      - ./authorization/src:/app
+    command: flask --app main:app --debug run --host=0.0.0.0
