@@ -4,4 +4,5 @@ Client -> Service: Access token. (With refresh?)
 rnote over Service: time to change access token.
 database DB_Redis
 Service -> DB_Redis:
+'?????
 @enduml

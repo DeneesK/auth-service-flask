@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> Service: access token, new login
+rnote over Service: Check
+database DB_Redis
+Service -> DB_Redis: Update the login. (Tokens left unchanged?)
+@enduml
