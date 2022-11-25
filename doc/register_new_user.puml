@@ -1,0 +1,7 @@
+@startuml
+Client -> Service: Login, password
+Service -> DB_Redis: Login, crypted password
+
+DB_Redis -> Service: If the user is not registered, register.
+Service -> Client: Session token.
+@enduml
