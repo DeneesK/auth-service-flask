@@ -1,13 +1,15 @@
 """The service won't handle errors itself, API does it."""
 import random
-from pbkdf2 import crypt
-from models.user import UserModel
+
 from db.orm import db_engine
+from models.user import UserModel
+from pbkdf2 import crypt
 
 
 def random_string(length):
     def random_char():
         return chr(random.randint(ord('a'), ord('z')))
+
     return ''.join(random_char() for _ in range(length))
 
 
@@ -17,8 +19,11 @@ class UserService:
     def create_new(self, login, password) -> (bool, str):
         """We hash the password here.
         :returns: Success or not"""
-        hashed_password = crypt(password, '.'+random_string(random.randint(10, 20)),
-                                iterations=self.password_hash_iterations)
+        hashed_password = crypt(
+            password,
+            '.' + random_string(random.randint(10, 20)),
+            iterations=self.password_hash_iterations,
+        )
         new_user = UserModel(login, hashed_password)
         db_engine.session.add(new_user)
         db_engine.session.commit()
