@@ -6,17 +6,16 @@ from .orm import db_engine
 
 
 def init_db(app: Flask):
-    username = os.environ.get('POSTGRES_USER')
-    password = os.environ.get('POSTGRES_PASSWORD')
-    host = os.environ.get('POSTGRES_HOST', '127.0.0.1')
-    db_name = os.environ.get('POSTGRES_DB', 'auth_database')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{username}:{password}@{host}/{db_name}'
-    print("init_db")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://{0}:{1}@{2}/{3}'.format(
+        os.environ.get('POSTGRES_USER'),
+        os.environ.get('POSTGRES_PASSWORD'),
+        os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+        os.environ.get('POSTGRES_DB', 'auth_database'),
+    )
+    print('init_db')
     db_engine.init_app(app)
     app.app_context().push()
 
     db_engine.create_all()
 
     db_engine.session.commit()
-
-

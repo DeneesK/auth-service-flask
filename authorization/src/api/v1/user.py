@@ -1,8 +1,7 @@
 from flask import Blueprint, request
 from services.user import UserService
 
-
-bp_user = Blueprint('user', __name__, url_prefix="/user")
+bp_user = Blueprint('user', __name__, url_prefix='/user')
 
 
 @bp_user.route('/create', methods=['POST'])  # TODO Use POST method here
