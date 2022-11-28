@@ -8,3 +8,7 @@ Copy `.env.sample` to `.env`. Execute `docker-compose up` to run in dev mode or 
 ## Code style enforcement
 
 Install [pre-commit](https://pypi.org/project/pre-commit/) python package to your environment (it is intentionally absent in requirements.txt) and run `pre-commit install` to install pre commit git hooks and check your code automatically before it's commited. It's handy to run `pre-commit` manually while working on code style issues or even use separate linting tools from `.pre-commit-config.yaml` eg. like *black* -  `black --skip-string-normalization` - to fix codestyle issues automatically.
+
+## Running functional tests
+
+Change your current directory to **tests/functional** then copy **.env.sample** to **.env** and execute `docker-compose up tests --no-log-prefix` to run tests.
