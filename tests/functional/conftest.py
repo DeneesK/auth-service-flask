@@ -36,16 +36,18 @@ async def pg_connection() -> AsyncGenerator[aiopg.connection.Connection, None]:
     }
     async with aiopg.create_pool(**connection_kwargs) as pool:
         async with pool.acquire() as conn:
+
+            yield conn
+
             async with conn.cursor() as cur:
                 await cur.execute('TRUNCATE users CASCADE;')
-                yield conn
 
 
 @pytest_asyncio.fixture(scope='module')
 async def redis() -> AsyncGenerator[aiopg.connection.Connection, None]:
     redis_table = aioredis.Redis(host=SETTINGS.redis_host, port=SETTINGS.redis_port)
 
-    yield None
+    yield redis_table
 
     await redis_table.flushall()
 
