@@ -1,16 +1,27 @@
-from flask import Blueprint, request
+from http import HTTPStatus
+from json import dumps
+
+from flask import Blueprint, make_response, request, url_for
 from services.user import UserService
+from utils import object_as_dict
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 
-@bp.route('', methods=['POST'])  # TODO Use POST method here
-# TODO Log shows the password!
+@bp.route('', methods=['POST'])
 def create():
-    msg = 'Create user from blueprint \n{0} \nresult:{1}'
-    # args = '\n'.join(f'{k}:{v}' for k, v in request.args.items())
     service = UserService()
     data = request.get_json()
-    result, result_ex = service.create_new(data['login'], data['password'])
-    msg1 = msg.format(result, result_ex)
-    return msg1, 201
+    user = service.create_new(data['login'], data['password'])
+    response = make_response(dumps(object_as_dict(user)), HTTPStatus.CREATED)
+    response.location = url_for('.get_user', user_id=user.id, _external=True)
+    return response
+
+
+@bp.route('/<user_id>', methods=['GET'])
+def get_user(user_id):
+    user = UserService().get(user_id)
+    if user is None:
+        return '', HTTPStatus.NOT_FOUND
+    else:
+        return dumps(object_as_dict(user)), HTTPStatus.OK

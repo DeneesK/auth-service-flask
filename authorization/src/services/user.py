@@ -27,4 +27,7 @@ class UserService:
         new_user = UserModel(login, hashed_password)
         db_engine.session.add(new_user)
         db_engine.session.commit()
-        return True, ''
+        return new_user
+
+    def get(self, user_id) -> UserModel:
+        return UserModel.query.get(user_id)
