@@ -13,4 +13,4 @@ def create():
     data = request.get_json()
     result, result_ex = service.create_new(data['login'], data['password'])
     msg1 = msg.format(result, result_ex)
-    return msg1
+    return msg1, 201

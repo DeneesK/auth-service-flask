@@ -11,4 +11,4 @@ async def test_user_create(make_request):
         'user/create',
         json={'login': 'test_user', 'password': 'test_pass'},
     )
-    assert response.status == HTTPStatus.OK
+    assert response.status == HTTPStatus.CREATED
