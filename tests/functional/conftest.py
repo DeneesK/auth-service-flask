@@ -69,7 +69,7 @@ def make_request(session):
         async def inner(
             method: str, json: Optional[dict] = None, headers: Optional[dict] = None
         ) -> HTTPResponse:
-            url = 'http://{0}:{1}/{2}'.format(
+            url = 'http://{0}:{1}/v1/{2}'.format(
                 SETTINGS.api_host,
                 SETTINGS.api_port,
                 method,

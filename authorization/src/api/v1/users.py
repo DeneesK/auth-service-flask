@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from services.user import UserService
 
-bp_user = Blueprint('user', __name__, url_prefix='/user')
+bp = Blueprint('users', __name__, url_prefix='/users')
 
 
-@bp_user.route('/create', methods=['POST'])  # TODO Use POST method here
+@bp.route('', methods=['POST'])  # TODO Use POST method here
 # TODO Log shows the password!
 def create():
     msg = 'Create user from blueprint \n{0} \nresult:{1}'
@@ -13,4 +13,4 @@ def create():
     data = request.get_json()
     result, result_ex = service.create_new(data['login'], data['password'])
     msg1 = msg.format(result, result_ex)
-    return msg1
+    return msg1, 201
