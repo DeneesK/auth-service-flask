@@ -16,6 +16,7 @@ SETTINGS = Settings()
 class HTTPResponse:
     body: dict
     status: int
+    headers: dict
 
 
 @pytest.fixture(scope='session')
@@ -84,6 +85,7 @@ def make_request(session):
                 return HTTPResponse(
                     body=body,
                     status=response.status,
+                    headers=response.headers,
                 )
 
         return inner
