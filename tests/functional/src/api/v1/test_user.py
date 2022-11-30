@@ -1,6 +1,5 @@
 import re
 from http import HTTPStatus
-from json import loads
 from uuid import uuid4
 
 import pytest
@@ -30,7 +29,10 @@ async def test_user_create(make_request):
     )
 
     # The response body contains a representation of the resource.
-    assert loads(response.body)['login'] == 'test_user'
+    assert response.body['login'] == 'test_user'
+
+    # Ensure we don't expose password
+    assert set(response.body.keys()) == set(['id', 'login'])
 
     # assign user's id to global variable to use in another tests
     # this is intentionally below assertions
@@ -48,4 +50,4 @@ async def test_user_read(make_request):
     global USER_ID
     response = await make_request('get')('users/{0}'.format(USER_ID))
     assert response.status == HTTPStatus.OK
-    assert loads(response.body)['id'] == USER_ID
+    assert response.body['id'] == USER_ID
