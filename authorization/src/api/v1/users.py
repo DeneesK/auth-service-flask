@@ -1,9 +1,8 @@
 from http import HTTPStatus
-from json import dumps
 
-from flask import Blueprint, make_response, request, url_for
+from flask import Blueprint, jsonify, make_response, request, url_for
+from schemas.user import user_data
 from services.user import UserService
-from utils import object_as_dict
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
@@ -13,7 +12,7 @@ def create():
     service = UserService()
     data = request.get_json()
     user = service.create_new(data['login'], data['password'])
-    response = make_response(dumps(object_as_dict(user)), HTTPStatus.CREATED)
+    response = make_response(jsonify(user_data.dump(user)), HTTPStatus.CREATED)
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
 
@@ -24,4 +23,4 @@ def get_user(user_id):
     if user is None:
         return '', HTTPStatus.NOT_FOUND
     else:
-        return dumps(object_as_dict(user)), HTTPStatus.OK
+        return jsonify(user_data.dump(user)), HTTPStatus.OK
