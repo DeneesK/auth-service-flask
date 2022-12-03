@@ -31,7 +31,7 @@ def get_user(user_id):
 @bp.route('/<user_id>', methods=['DELETE'])
 def remove_user(user_id):
     service = UserService()
-    result = service._delete(user_id)
+    result = service.delete(user_id)
     if result:
         return jsonify({'message': f'User with id {user_id} deleted'}), HTTPStatus.OK
     return jsonify({'message': f'User with id {user_id} not found'}), HTTPStatus.NOT_FOUND
