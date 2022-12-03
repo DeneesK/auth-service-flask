@@ -5,3 +5,4 @@ pbkdf2-reboot==1.0
 flask_sqlalchemy==3.0.2
 psycopg2-binary==2.9.5
 gevent==22.10.2
+flasgger==0.9.5
