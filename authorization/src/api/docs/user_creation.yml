@@ -1,7 +1,7 @@
 Create new user
 ---
 tags:
-  - user
+  - user_creation
 parameters:
   - in: body
     name: body
