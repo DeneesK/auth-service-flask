@@ -91,3 +91,12 @@ def make_request(session):
         return inner
 
     return wrapper
+
+
+@pytest_asyncio.fixture
+async def user(make_request):
+    response = await make_request('post')(
+        'users',
+        json={'login': 'test_user', 'password': 'test_pass'},
+    )
+    yield response.body
