@@ -28,10 +28,8 @@ def get_user(user_id):
         return jsonify(user_data.dump(user)), HTTPStatus.OK
 
 
-@bp.route('/remove', methods=['POST'])
-def remove_user():
-    data = request.get_json()
-    user_id = data['id']
+@bp.route('/<user_id>', methods=['DELETE'])
+def remove_user(user_id):
     service = UserService()
     result = service.delete(user_id)
     if result:

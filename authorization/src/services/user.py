@@ -26,7 +26,7 @@ class UserService:
             '.' + random_string(random.randint(10, 20)),
             iterations=self.password_hash_iterations,
         )
-        new_user = UserModel(login=login,password=hashed_password)
+        new_user = UserModel(login=login, password=hashed_password)
         db_engine.session.add(new_user)
         db_engine.session.commit()
         return new_user
