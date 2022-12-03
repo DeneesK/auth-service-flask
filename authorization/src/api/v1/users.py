@@ -9,7 +9,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('', methods=['POST'])
-@swag_from('docs/user_creation.yml', methods=['Post'])
+@swag_from('../docs/user_creation.yml', methods=['Post'])
 def create():
     service = UserService()
     data = request.get_json()
@@ -29,6 +29,7 @@ def get_user(user_id):
 
 
 @bp.route('/<user_id>', methods=['DELETE'])
+@swag_from('../docs/user_remove.yml', methods=['Delete'])
 def remove_user(user_id):
     service = UserService()
     result = service.delete(user_id)

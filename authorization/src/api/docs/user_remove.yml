@@ -1,0 +1,25 @@
+Delete user
+---
+tags:
+- users
+parameters:
+  - name: user_id
+    in: path
+    type: string
+    required: true
+
+responses:
+  200:
+    description: Message that user was deleted
+    schema:
+      properties:
+        message:
+          type: string
+          description: Response message
+  404:
+    description: Bad request, user not found
+    schema:
+      properties:
+        message:
+          type: string
+          description: Response message
