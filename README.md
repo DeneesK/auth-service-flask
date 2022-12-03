@@ -12,3 +12,7 @@ Install [pre-commit](https://pypi.org/project/pre-commit/) python package to you
 ## Running functional tests
 
 Change your current directory to **tests/functional** then copy **.env.sample** to **.env** and execute `docker-compose up tests --no-log-prefix` to run tests.
+
+## Documentation
+
+After starting the project, you will have access to the project documentation: [localhost:5000/apidocs](localhost:5000/apidocs)

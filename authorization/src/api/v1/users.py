@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Blueprint, jsonify, make_response, request, url_for
+from flasgger.utils import swag_from
 from schemas.user import user_data
 from services.user import UserService
 
@@ -8,6 +9,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('', methods=['POST'])
+@swag_from('docs/user_creation.yml', methods=['Post'])
 def create():
     service = UserService()
     data = request.get_json()
