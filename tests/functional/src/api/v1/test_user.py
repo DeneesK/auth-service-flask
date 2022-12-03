@@ -51,3 +51,13 @@ async def test_user_read(make_request):
     response = await make_request('get')('users/{0}'.format(USER_ID))
     assert response.status == HTTPStatus.OK
     assert response.body['id'] == USER_ID
+
+
+async def test_user_remove_exist(make_request, create_user):
+    r = await make_request('delete')('users/{0}'.format(USER_ID))
+    assert r.status == HTTPStatus.OK
+
+
+async def test_user_remove_not_exist(make_request, create_user):
+    r = await make_request('delete')('users/{0}'.format(USER_ID))
+    assert r.status == HTTPStatus.NOT_FOUND

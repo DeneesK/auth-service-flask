@@ -1,7 +1,7 @@
 from api.v1 import bp
 from db.init import init_db
-from flask import Flask
 from flasgger import Swagger
+from flask import Flask
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
