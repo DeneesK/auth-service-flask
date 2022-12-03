@@ -29,5 +29,5 @@ swagger = Swagger(
 app.config["SWAGGER"] = {
     "title": "Swagger JWT Authentiation App",
     "uiversion": 3,
-    'doc_dir': './api/yml_docs/'
+    'doc_dir': './api/docs/'
 }
