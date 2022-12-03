@@ -1,8 +1,6 @@
 """The service won't handle errors itself, API does it."""
 import random
 
-from sqlalchemy import delete
-
 from db.orm import db_engine
 from models.user import UserModel
 from pbkdf2 import crypt
@@ -34,7 +32,7 @@ class UserService:
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
     
-    def delete(self, user_id):
+    def _delete(self, user_id):
         user = UserModel.query.filter_by(id=user_id).first()
         if user:
             db_engine.session.delete(user)

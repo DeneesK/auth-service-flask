@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from flask import Blueprint, jsonify, make_response, request, url_for
 from flasgger.utils import swag_from
+from flask import Blueprint, jsonify, make_response, request, url_for
 from schemas.user import user_data
 from services.user import UserService
 
@@ -31,8 +31,7 @@ def get_user(user_id):
 @bp.route('/<user_id>', methods=['DELETE'])
 def remove_user(user_id):
     service = UserService()
-    result = service.delete(user_id)
+    result = service._delete(user_id)
     if result:
         return jsonify({'message': f'User with id {user_id} deleted'}), HTTPStatus.OK
     return jsonify({'message': f'User with id {user_id} not found'}), HTTPStatus.NOT_FOUND
-
