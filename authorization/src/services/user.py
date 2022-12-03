@@ -32,8 +32,8 @@ class UserService:
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
     
-    def delete(self, user_id):
-        user = UserModel.query.get(user_id)
+    def _delete(self, user_id):
+        user = UserModel.query.filter_by(id=user_id).first()
         if user:
             db_engine.session.delete(user)
             db_engine.session.commit()
