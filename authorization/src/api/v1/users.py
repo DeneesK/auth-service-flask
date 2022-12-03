@@ -13,7 +13,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 def create():
     service = UserService()
     data = request.get_json()
-    user = service.create_new(data['login'], data['password'])
+    user = service.create(data['login'], data['password'])
     response = make_response(jsonify(user_data.dump(user)), HTTPStatus.CREATED)
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
@@ -26,3 +26,15 @@ def get_user(user_id):
         return '', HTTPStatus.NOT_FOUND
     else:
         return jsonify(user_data.dump(user)), HTTPStatus.OK
+
+
+@bp.route('/remove', methods=['POST'])
+def remove_user():
+    data = request.get_json()
+    user_id = data['id']
+    service = UserService()
+    result = service.delete(user_id)
+    if result:
+        return jsonify({'message': f'User with id {user_id} deleted'}), HTTPStatus.OK
+    return jsonify({'message': f'User with id {user_id} not found'}), HTTPStatus.NOT_FOUND
+
