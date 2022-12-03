@@ -1,7 +1,7 @@
-Create new user
+Login ans get access token
 ---
 tags:
-  - user_creation
+  - auth
 parameters:
   - in: body
     name: body
@@ -20,18 +20,25 @@ parameters:
           description: The user's password.
           default: "Qwerty123"
 responses:
-  201:
+  200:
     description: Message that user was created
     schema:
       properties:
-        id:
+        access:
           type: string
           description: id of created user
           default: null
-        login:
+        refresh:
           type: string
-          description: login
+          description: id of created user
           default: null
+  403:
+    description: Forbidden
+    schema:
+      properties:
+        message:
+          type: string
+          description: Response message
   400:
     description: Bad request response
     schema:
