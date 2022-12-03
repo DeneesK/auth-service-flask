@@ -51,3 +51,22 @@ async def test_user_read(make_request):
     response = await make_request('get')('users/{0}'.format(USER_ID))
     assert response.status == HTTPStatus.OK
     assert response.body['id'] == USER_ID
+
+
+
+async def test_user_remove(make_request):
+    response = await make_request('post')(
+        'users',
+        json={'login': 'test_remove', 'password': 'test_pass'},
+    )
+    user_id = response.get_json()['id']
+    
+    r = await make_request('post')('users/remove',
+                                   json={'id': user_id}
+    )
+    r2 = await make_request('post')('users/remove',
+                                    json={'id': user_id}
+    )
+    assert r.status == HTTPStatus.OK
+    assert r2.status == HTTPStatus.NOT_FOUND
+    
