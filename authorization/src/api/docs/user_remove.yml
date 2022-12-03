@@ -17,7 +17,7 @@ responses:
           type: string
           description: Response message
   404:
-    description: Bad request, user not found
+    description: Not found, user not found
     schema:
       properties:
         message:

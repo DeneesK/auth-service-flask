@@ -27,4 +27,4 @@ def login():
     tokens = gen_tokens(user)
     redis_connection.set('refresh:{0}'.format(tokens['refresh']), 1, ex=604800)
 
-    return tokens, 200
+    return tokens, HTTPStatus.OK
