@@ -31,3 +31,8 @@ class UserService:
 
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
+
+    def get_by_credentials(self, login, password) -> UserModel:
+        user = UserModel.query.filter(UserModel.login == login).one_or_none()
+        if user and user.password == crypt(password, user.password):
+            return user
