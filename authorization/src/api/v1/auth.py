@@ -7,7 +7,6 @@ from flasgger.utils import swag_from
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
 from services.user import UserService
-from models.user import UserModel
 from utils.tokens import gen_tokens, SECRET_KEY
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
