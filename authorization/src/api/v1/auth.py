@@ -52,6 +52,4 @@ def token_refresh():
 
             return tokens, HTTPStatus.OK
 
-        return '', HTTPStatus.FORBIDDEN
-
     return '', HTTPStatus.FORBIDDEN
