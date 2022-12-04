@@ -8,7 +8,7 @@ from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
 from services.user import UserService
 from models.user import UserModel
-from utils.tokens import gen_tokens
+from utils.tokens import gen_tokens, SECRET_KEY
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -42,7 +42,7 @@ def token_refresh():
         redis_connection.delete('refresh:{0}'.format(token))
         user_data = jwt.decode(
         token,
-        'MQ1JbT6uwNzyb2pdFa6tI5No4cope2cT48DR3rhp2V7elM6StWG1qsMVjNupTTP',
+        SECRET_KEY,
         algorithms='HS256',
     )
         user = UserModel(id=user_data['id'], login=user_data['login'])
