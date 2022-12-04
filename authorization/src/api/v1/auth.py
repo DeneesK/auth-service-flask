@@ -1,12 +1,14 @@
 from http import HTTPStatus
 
+import jwt
 from db.redis import redis_connection
 from flask import Blueprint, jsonify, request
 from flasgger.utils import swag_from
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
 from services.user import UserService
-from utils.tokens import gen_tokens
+from models.user import UserModel
+from utils.tokens import gen_tokens, SECRET_KEY
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -28,3 +30,28 @@ def login():
     redis_connection.set('refresh:{0}'.format(tokens['refresh']), 1, ex=604800)
 
     return tokens, HTTPStatus.OK
+
+
+@bp.route('/refresh', methods=['POST'])
+def token_refresh():
+    data = request.get_json()
+    token = data.get('refresh')
+    response = redis_connection.get('refresh:{0}'.format(token))
+    
+    if response:
+        redis_connection.delete('refresh:{0}'.format(token))
+        user_data = jwt.decode(
+        token,
+        SECRET_KEY,
+        algorithms='HS256',
+    )
+        user = UserService().get(user_data['id'])
+        if user:
+            tokens = gen_tokens(user)
+            redis_connection.set('refresh:{0}'.format(tokens['refresh']), 1, ex=604800)
+
+            return tokens, HTTPStatus.OK
+
+        return '', HTTPStatus.FORBIDDEN
+
+    return '', HTTPStatus.FORBIDDEN

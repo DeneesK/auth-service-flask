@@ -1,4 +1,4 @@
-Login ans get access token
+Login and get access + refresh tokens
 ---
 tags:
   - auth

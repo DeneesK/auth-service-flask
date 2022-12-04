@@ -4,6 +4,8 @@ import jwt
 from models.user import UserModel
 from schemas.user import user_data
 
+#  Would it be better to use an environment variable?
+SECRET_KEY = 'MQ1JbT6uwNzyb2pdFa6tI5No4cope2cT48DR3rhp2V7elM6StWG1qsMVjNupTTP'
 
 def _gen_access(user: UserModel, time_out: int = 600) -> (str, int):
     time_now = datetime.now()
@@ -16,7 +18,7 @@ def _gen_access(user: UserModel, time_out: int = 600) -> (str, int):
     )
     return jwt.encode(
         payload,
-        'MQ1JbT6uwNzyb2pdFa6tI5No4cope2cT48DR3rhp2V7elM6StWG1qsMVjNupTTP',
+        SECRET_KEY,
         algorithm='HS256',
     )
 
