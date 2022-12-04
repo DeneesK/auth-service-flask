@@ -52,6 +52,6 @@ def token_refresh():
 
             return tokens, HTTPStatus.OK
 
-        return {'message': 'user not exists'}, HTTPStatus.NOT_FOUND
+        return '', HTTPStatus.FORBIDDEN
 
-    return {'message': 'refresh token is outdated or non-existent'}, HTTPStatus.FORBIDDEN
+    return '', HTTPStatus.FORBIDDEN
