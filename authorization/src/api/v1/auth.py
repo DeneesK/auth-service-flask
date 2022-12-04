@@ -45,10 +45,13 @@ def token_refresh():
         SECRET_KEY,
         algorithms='HS256',
     )
-        user = UserModel(id=user_data['id'], login=user_data['login'])
-        tokens = gen_tokens(user)
-        redis_connection.set('refresh:{0}'.format(tokens['refresh']), 1, ex=604800)
+        user = UserService().get(user_data['id'])
+        if user:
+            tokens = gen_tokens(user)
+            redis_connection.set('refresh:{0}'.format(tokens['refresh']), 1, ex=604800)
 
-        return tokens, HTTPStatus.OK
+            return tokens, HTTPStatus.OK
+
+        return {'message': 'user not exists'}, HTTPStatus.NOT_FOUND
 
     return {'message': 'refresh token is outdated or non-existent'}, HTTPStatus.FORBIDDEN
