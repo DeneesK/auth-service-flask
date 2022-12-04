@@ -58,11 +58,11 @@ async def test_create_existing_user(user):
     assert response.status == HTTPStatus.BAD_REQUEST
 
 
-async def test_user_remove_exist(make_request, create_user):
+async def test_user_remove_exist(make_request):
     r = await make_request('delete')('users/{0}'.format(USER_ID))
     assert r.status == HTTPStatus.OK
 
 
-async def test_user_remove_not_exist(make_request, create_user):
+async def test_user_remove_not_exist(make_request):
     r = await make_request('delete')('users/{0}'.format(USER_ID))
     assert r.status == HTTPStatus.NOT_FOUND

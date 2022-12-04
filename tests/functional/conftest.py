@@ -99,4 +99,4 @@ async def user(make_request):
         'users',
         json={'login': 'test_user', 'password': 'test_pass'},
     )
-    yield response.body
+    yield response
