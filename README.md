@@ -15,4 +15,4 @@ Change your current directory to **tests/functional** then copy **.env.sample** 
 
 ## Documentation
 
-After starting the project, you will have access to the project documentation: [localhost:5000/apidocs](localhost:5000/apidocs)
+After starting the project, you will have access to the project documentation: [localhost:5000/apidocs]( http://localhost:5000/apidocs)

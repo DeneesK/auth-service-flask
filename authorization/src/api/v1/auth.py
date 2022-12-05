@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from http import HTTPStatus
 
 import jwt
@@ -51,4 +52,37 @@ def token_refresh():
 
             return tokens, HTTPStatus.OK
 
+    return '', HTTPStatus.FORBIDDEN
+
+
+@bp.route('/logout', methods=['POST'])
+def logout():
+    tokens = request.get_json()
+    response = redis_connection.get('refresh:{0}'.format(tokens['refresh']))
+    
+    if response:
+        redis_connection.delete('refresh:{0}'.format(tokens['refresh']))
+        redis_connection.set('refresh:{0}'.format(tokens['access']), 0, ex=600)
+        return '', HTTPStatus.OK
+    
+    return '', HTTPStatus.FORBIDDEN
+
+
+@bp.route('/logout_all', methods=['POST'])
+def logout_all():
+    tokens = request.get_json()
+    response = redis_connection.get('refresh:{0}'.format(tokens['refresh']))
+    
+    if response:
+        redis_connection.delete('refresh:{0}'.format(tokens['refresh']))
+        redis_connection.set('refresh:{0}'.format(tokens['access']), 0, ex=600)
+        user_data = jwt.decode(
+        tokens['refresh'],
+        SECRET_KEY,
+        algorithms='HS256',
+    )
+        time_now = datetime.now()
+        redis_connection.set('logout:{0}'.format(user_data['id']), time_now, ex=604800)
+        return '', HTTPStatus.OK
+    
     return '', HTTPStatus.FORBIDDEN
