@@ -53,9 +53,15 @@ async def test_user_read(make_request):
     assert response.body['id'] == USER_ID
 
 
-async def test_create_existing_user(user):
-    response = user
-    assert response.status == HTTPStatus.BAD_REQUEST
+async def test_create_existing_user(make_request):
+    await make_request('post')('users',
+    json={'login': 'test_user1', 'password': 'test_pass'},)
+
+    response = await make_request('post')(
+    'users',
+    json={'login': 'test_user1', 'password': 'test_pass'},
+    )
+    assert response.status == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 async def test_user_remove_exist(make_request):

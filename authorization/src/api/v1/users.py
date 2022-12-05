@@ -17,7 +17,7 @@ def create():
     try:
         user = service.create(data['login'], data['password'])
     except IntegrityError as er:
-        return jsonify({'message': str(er.orig)}), HTTPStatus.BAD_REQUEST
+        return jsonify({'message': str(er.orig)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
     response = make_response(jsonify(user_data.dump(user)), HTTPStatus.CREATED)
     response.location = url_for('.get_user', user_id=user.id, _external=True)
