@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from sqlalchemy.exc import IntegrityError
 from flasgger.utils import swag_from
 from flask import Blueprint, jsonify, make_response, request, url_for
 from schemas.user import user_data
@@ -13,11 +14,14 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 def create():
     service = UserService()
     data = request.get_json()
-    user = service.create(data['login'], data['password'])
+    try:
+        user = service.create(data['login'], data['password'])
+    except IntegrityError as er:
+        return jsonify({'message': str(er.orig)}), HTTPStatus.INTERNAL_SERVER_ERROR
+
     response = make_response(jsonify(user_data.dump(user)), HTTPStatus.CREATED)
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
-
 
 @bp.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
