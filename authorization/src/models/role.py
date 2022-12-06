@@ -1,7 +1,5 @@
 import uuid
 
-# from sqlalchemy.orm import Mapped, relationship
-
 from db.orm import db_engine as db
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -16,9 +14,8 @@ class RoleModel(db.Model):
         unique=True,
         nullable=False,
     )
-    name = db.Column(db.String, unique=False, nullable=False)
+    name = db.Column(db.String, unique=False, nullable=False, unique=True)
     client_service_id = db.Column(db.String, nullable=False)
-    # resources: Mapped[list[ResourceModel]] = relationship()
 
     def __repr__(self):
         return f'<Role {self.name}>'
