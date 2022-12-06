@@ -10,9 +10,8 @@ def init_db(app: Flask):
         os.environ.get('POSTGRES_USER'),
         os.environ.get('POSTGRES_PASSWORD'),
         os.environ.get('POSTGRES_HOST', '127.0.0.1'),
-        os.environ.get('POSTGRES_DB', 'auth_database'),
+        os.environ.get('POSTGRES_DB'),
     )
-    print('init_db')
     db_engine.init_app(app)
     app.app_context().push()
 
