@@ -9,6 +9,7 @@ services:
       - POSTGRES_USER
       - POSTGRES_DB
       - POSTGRES_HOST
+      - REDIS_HOST
     depends_on:
       - db
       - redis

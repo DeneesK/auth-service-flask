@@ -1,4 +1,4 @@
-from flask_marshmallow.sqla import SQLAlchemyAutoSchema
+from flask_marshmallow.sqla import SQLAlchemyAutoSchema, auto_field
 from models.user import UserModel
 from models.role import RoleModel
 from models.resource import ResourceModel
@@ -7,7 +7,8 @@ from models.resource import ResourceModel
 class UserData(SQLAlchemyAutoSchema):
     class Meta:
         model = UserModel
-        exclude = ('password',)
+
+    password = auto_field(load_only=True)
 
 
 class RoleData(SQLAlchemyAutoSchema):

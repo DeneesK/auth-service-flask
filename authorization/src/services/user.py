@@ -16,7 +16,7 @@ def random_string(length):
 class UserService:
     password_hash_iterations = 100
 
-    def create_new(self, login, password) -> (bool, str):
+    def create(self, login, password) -> (bool, str):
         """We hash the password here.
         :returns: Success or not"""
         hashed_password = crypt(
@@ -24,10 +24,24 @@ class UserService:
             '.' + random_string(random.randint(10, 20)),
             iterations=self.password_hash_iterations,
         )
-        new_user = UserModel(login, hashed_password)
+        new_user = UserModel(login=login, password=hashed_password)
         db_engine.session.add(new_user)
         db_engine.session.commit()
         return new_user
 
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
+    
+    def delete(self, user_id):
+        user = UserModel.query.get(user_id)
+        if user:
+            db_engine.session.delete(user)
+            db_engine.session.commit()
+            return True
+        return False
+
+
+    def get_by_credentials(self, login, password) -> UserModel:
+        user = UserModel.query.filter(UserModel.login == login).one_or_none()
+        if user and user.password == crypt(password, user.password):
+            return user
