@@ -100,3 +100,4 @@ async def user(make_request):
         json={'login': 'test_user', 'password': 'test_pass'},
     )
     yield response.body
+    await make_request('delete')('users/{0}'.format(response.body['id']))
