@@ -100,4 +100,4 @@ def access_token_check():
     elif time_now < token_exp and not is_invalidated:
             return '', HTTPStatus.OK
 
-    return '', HTTPStatus.NO_CONTENT
+    return '', HTTPStatus.FORBIDDEN
