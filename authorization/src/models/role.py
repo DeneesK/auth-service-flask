@@ -14,7 +14,7 @@ class RoleModel(db.Model):
         unique=True,
         nullable=False,
     )
-    name = db.Column(db.String, unique=False, nullable=False, unique=True)
+    name = db.Column(db.String, unique=True, nullable=False)
     client_service_id = db.Column(db.String, nullable=False)
 
     def __repr__(self):

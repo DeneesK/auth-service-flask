@@ -23,6 +23,7 @@ def create():
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
 
+
 @bp.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = UserService().get(user_id)
