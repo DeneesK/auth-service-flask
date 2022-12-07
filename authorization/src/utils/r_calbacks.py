@@ -1,5 +1,4 @@
 def decode_resp(arg):
-    try:
+    if arg: 
         return arg.decode()
-    except AttributeError:
-        return arg
+    return arg
