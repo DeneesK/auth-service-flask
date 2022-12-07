@@ -77,3 +77,27 @@ def logout_all():
     time_now = datetime.timestamp(datetime.now())
     redis_connection.set('logout_all: {0}'.format(user_data['id']), time_now, ex=604800)
     return '', HTTPStatus.OK
+
+
+@bp.route('/access_token_check', methods=['POST'])
+def access_token_check():
+    data = request.get_json()
+    token = data.get('access')
+    user_data = jwt.decode(token, SECRET_KEY,
+                           algorithms='HS256',)
+
+    time_now = int(datetime.timestamp(datetime.now()))    
+    token_exp = int(user_data['exp'])
+    is_invalidated = redis_connection.get('invalidated_access:{0}'.format(token))
+    is_logout_all = redis_connection.get('logout_all: {0}'.format(user_data['id']))
+    
+    if is_logout_all:
+        logout_all_time = float(is_logout_all.decode())
+        token_iat = int(user_data['iat'])
+        if logout_all_time < token_iat and time_now < token_exp and not is_invalidated:
+            return '', HTTPStatus.OK
+
+    elif time_now < token_exp and not is_invalidated:
+            return '', HTTPStatus.OK
+
+    return '', HTTPStatus.NO_CONTENT
