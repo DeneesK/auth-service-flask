@@ -92,7 +92,7 @@ def access_token_check():
     is_logout_all = redis_connection.get('logout_all: {0}'.format(user_data['id']))
     
     if is_logout_all:
-        logout_all_time = float(is_logout_all.decode())
+        logout_all_time = float(is_logout_all)
         token_iat = int(user_data['iat'])
         if logout_all_time < token_iat and time_now < token_exp and not is_invalidated:
             return '', HTTPStatus.OK
