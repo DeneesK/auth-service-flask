@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
-from sqlalchemy.exc import IntegrityError
 from flasgger.utils import swag_from
 from flask import Blueprint, jsonify, make_response, request, url_for
 from schemas.user import user_data
 from services.user import UserService
+from sqlalchemy.exc import IntegrityError
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
@@ -23,6 +23,7 @@ def create():
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
 
+
 @bp.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = UserService().get(user_id)
@@ -39,4 +40,7 @@ def remove_user(user_id):
     result = service.delete(user_id)
     if result:
         return jsonify({'message': f'User with id {user_id} deleted'}), HTTPStatus.OK
-    return jsonify({'message': f'User with id {user_id} not found'}), HTTPStatus.NOT_FOUND
+    return (
+        jsonify({'message': f'User with id {user_id} not found'}),
+        HTTPStatus.NOT_FOUND,
+    )
