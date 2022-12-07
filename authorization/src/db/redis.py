@@ -1,7 +1,6 @@
 import os
 
 import redis
-
 from utils.r_calbacks import decode_resp
 
 redis_connection = redis.Redis(

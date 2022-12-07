@@ -3,12 +3,12 @@ from http import HTTPStatus
 
 import jwt
 from db.redis import redis_connection
-from flask import Blueprint, jsonify, request
 from flasgger.utils import swag_from
+from flask import Blueprint, jsonify, request
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
 from services.user import UserService
-from utils.tokens import gen_tokens, SECRET_KEY
+from utils.tokens import SECRET_KEY, gen_tokens
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -37,14 +37,14 @@ def token_refresh():
     data = request.get_json()
     token = data.get('refresh')
     response = redis_connection.get('refresh:{0}'.format(token))
-    
+
     if response:
         redis_connection.delete('refresh:{0}'.format(token))
         user_data = jwt.decode(
-        token,
-        SECRET_KEY,
-        algorithms='HS256',
-    )
+            token,
+            SECRET_KEY,
+            algorithms='HS256',
+        )
         user = UserService().get(user_data['id'])
         if user:
             tokens = gen_tokens(user)
@@ -59,21 +59,21 @@ def token_refresh():
 def logout():
     tokens = request.get_json()
     response = redis_connection.get('refresh:{0}'.format(tokens['refresh']))
-    
+
     if response:
         redis_connection.delete('refresh:{0}'.format(tokens['refresh']))
-        redis_connection.set('invalidated_access:{0}'.format(tokens['access']), 0, ex=600)
+        redis_connection.set(
+            'invalidated_access:{0}'.format(tokens['access']), 0, ex=600
+        )
         return '', HTTPStatus.OK
-    
+
     return '', HTTPStatus.NO_CONTENT
 
 
 @bp.route('/logout_all', methods=['POST'])
 def logout_all():
     tokens = request.get_json()
-    user_data = jwt.decode(tokens['refresh'],
-    SECRET_KEY,
-    algorithms='HS256',)
+    user_data = jwt.decode(tokens['refresh'], SECRET_KEY, algorithms='HS256')
     time_now = datetime.timestamp(datetime.now())
     redis_connection.set('logout_all: {0}'.format(user_data['id']), time_now, ex=604800)
     return '', HTTPStatus.OK
@@ -83,14 +83,17 @@ def logout_all():
 def access_token_check():
     data = request.get_json()
     token = data.get('access')
-    user_data = jwt.decode(token, SECRET_KEY,
-                           algorithms='HS256',)
+    user_data = jwt.decode(
+        token,
+        SECRET_KEY,
+        algorithms='HS256',
+    )
 
-    time_now = int(datetime.timestamp(datetime.now()))    
+    time_now = int(datetime.timestamp(datetime.now()))
     token_exp = int(user_data['exp'])
     is_invalidated = redis_connection.get('invalidated_access:{0}'.format(token))
     is_logout_all = redis_connection.get('logout_all: {0}'.format(user_data['id']))
-    
+
     if is_logout_all:
         logout_all_time = float(is_logout_all)
         token_iat = int(user_data['iat'])
@@ -98,6 +101,6 @@ def access_token_check():
             return '', HTTPStatus.OK
 
     elif time_now < token_exp and not is_invalidated:
-            return '', HTTPStatus.OK
+        return '', HTTPStatus.OK
 
     return '', HTTPStatus.FORBIDDEN
