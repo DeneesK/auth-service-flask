@@ -10,7 +10,7 @@ from models.role import RoleModel
 
 
 class ResourceModel(db.Model):
-    __tablename__ = 'resources'
+    __tablename__ = "resources"
 
     id = db.Column(UUID(as_uuid=True),
                    primary_key=True,
@@ -21,12 +21,12 @@ class ResourceModel(db.Model):
 
     name = db.Column(db.String, unique=False, nullable=False)
 
-    permission: Mapped[list[RoleModel]] = relationship('Permission',
-                                                       back_populates='resource')
-    roles = association_proxy('permission', 'role')
+    permission: Mapped[list[RoleModel]] = relationship("ResourceRole",
+                                                       back_populates="resource")
+    roles = association_proxy("permission", "role")
 
 
-class Permission(db.Model):
+class ResourceRole(db.Model):
     """Links resource and role and action"""
     __tablename__ = "resource_role_table"
 
@@ -38,6 +38,6 @@ class Permission(db.Model):
                    )
     resource_id = db.Column(UUID(as_uuid=True), db.ForeignKey("resources.id"))
     role_id = db.Column(UUID(as_uuid=True), db.ForeignKey("roles.id"))
-    action = db.Column(Enum("view", "delete", "edit", name='resource_action', create_type=True))
+    action = db.Column(Enum("view", "delete", "edit", name="resource_action", create_type=True))
 
-    resource = db.relationship(ResourceModel, back_populates='permission')
+    resource = db.relationship(ResourceModel, back_populates="permission")
