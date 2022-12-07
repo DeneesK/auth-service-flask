@@ -2,7 +2,7 @@ import os
 
 import redis
 
-from utils.redis_callback import decode_resp
+from utils.r_calbacks import decode_resp
 
 redis_connection = redis.Redis(
     os.environ.get('REDIS_HOST', 'localhost'),
