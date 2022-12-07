@@ -9,6 +9,8 @@ services:
       - db
       - redis
   auth:
+    environment:
+      - AUTH_CONFIG=config.TestingConfig
     extends:
       file: ../../docker-compose.yml
       service: auth
