@@ -3,6 +3,7 @@ from http import HTTPStatus
 from flasgger.utils import swag_from
 from flask import Blueprint, jsonify, make_response, request, url_for
 from schemas.user import user_data
+from services.history import HistoryService
 from services.user import UserService
 from sqlalchemy.exc import IntegrityError
 
@@ -42,5 +43,27 @@ def remove_user(user_id):
         return jsonify({'message': f'User with id {user_id} deleted'}), HTTPStatus.OK
     return (
         jsonify({'message': f'User with id {user_id} not found'}),
+        HTTPStatus.NOT_FOUND,
+    )
+
+
+@bp.route('/<user_id>/history', methods=['GET'])
+def get_history(user_id):
+    service = HistoryService()
+    history = service.get_history(user_id)
+    if history:
+        return (
+            jsonify(
+                {
+                    'user_history': [
+                        {'date': str(x.access_date), 'device': x.device}
+                        for x in history
+                    ]
+                }
+            ),
+            HTTPStatus.OK,
+        )
+    return (
+        jsonify({'message': 'User or user history not found'}),
         HTTPStatus.NOT_FOUND,
     )
