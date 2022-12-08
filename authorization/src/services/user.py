@@ -40,7 +40,6 @@ class UserService:
             return True
         return False
 
-
     def get_by_credentials(self, login, password) -> UserModel:
         user = UserModel.query.filter(UserModel.login == login).one_or_none()
         if user and user.password == crypt(password, user.password):
