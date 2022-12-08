@@ -26,7 +26,7 @@ class ProductionConfig(Config):
     @property
     def SECRET_KEY(self):
         # don't use environ.get() method here
-        # to fail loud without secret key on production
+        # to fail loudly without secret key on production
         return environ['SECRET_KEY']
 
     # wrap this in the method to execute runtime only
@@ -34,7 +34,7 @@ class ProductionConfig(Config):
     @property
     def TOKEN_SECRET_KEY(self):
         # don't use environ.get() method here
-        # to fail loud without secret key on production
+        # to fail loudly without secret key on production
         return environ['TOKEN_SECRET_KEY']
 
 
