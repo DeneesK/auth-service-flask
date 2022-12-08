@@ -35,7 +35,7 @@ def login():
 
     device = request.headers.get('sec-ch-ua-platform')
     if not device:
-        device = request.headers.get('User_Agent').split(' ')[1]
+        device = request.headers.get('User_Agent')
     history_service = HistoryService()
     history_service.store_history(user.id, device)
 
