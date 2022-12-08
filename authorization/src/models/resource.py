@@ -19,7 +19,9 @@ class ResourceModel(db.Model):
                    nullable=False,
                    )
 
-    name = db.Column(db.String, unique=False, nullable=False)
+    name = db.Column(db.String,
+                     unique=False,
+                     nullable=False)
 
     permission: Mapped[list[RoleModel]] = relationship('ResourceRole',
                                                        back_populates='resource')
@@ -36,8 +38,13 @@ class ResourceRole(db.Model):
                    unique=True,
                    nullable=False,
                    )
-    resource_id = db.Column(UUID(as_uuid=True), db.ForeignKey('resources.id'))
-    role_id = db.Column(UUID(as_uuid=True), db.ForeignKey('roles.id'))
+    resource_id = db.Column(UUID(as_uuid=True),
+                            db.ForeignKey('resources.id'))
+
+    role_id = db.Column(UUID(as_uuid=True),
+                        db.ForeignKey('roles.id'))
+
     action = db.Column(Enum('view', 'delete', 'edit', name='resource_action', create_type=True))
 
-    resource = db.relationship(ResourceModel, back_populates='permission')
+    resource = db.relationship(ResourceModel,
+                               back_populates='permission')
