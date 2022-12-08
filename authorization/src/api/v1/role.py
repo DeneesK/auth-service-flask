@@ -8,7 +8,7 @@ from services.role import RoleService
 bp = Blueprint('roles', __name__, url_prefix='/roles')
 
 
-@bp.route('/create', methods=['POST'])
+@bp.route('', methods=['POST'])
 def create():
     role_service = RoleService()
     try:
