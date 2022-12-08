@@ -16,3 +16,7 @@ class HistoryService:
             device=device,
         )
         return access_record
+
+    def get_history(self, user_id: uuid4) -> list:
+        history = HistoryModel.query.filter_by(user_id=user_id).all()
+        return history
