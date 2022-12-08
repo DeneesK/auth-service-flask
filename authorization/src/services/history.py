@@ -1,17 +1,19 @@
+from uuid import uuid4
+
 from db.orm import db_engine
-from models.history import HistoryModel, UserHistory
+from models.history import HistoryModel
 
 
-class UserHistoryService:
-    def add_record_user_history(self, user_id, device):
-        access_record = self._create_record(device)
-        new_record = UserHistory(user_id=user_id, access_history_id=access_record.id)
-        db_engine.session.add(new_record)
+class HistoryService:
+    def store_history(self, user_id: uuid4, device: str) -> bool:
+        record = self._create_record(user_id, device)
+        db_engine.session.add(record)
         db_engine.session.commit()
         return True
 
-    def _create_record_access_history(self, device):
-        access_record = HistoryModel(device=device)
-        db_engine.session.add(access_record)
-        db_engine.session.commit()
+    def _create_record(self, user_id: uuid4, device: str) -> HistoryModel:
+        access_record = HistoryModel(
+            user_id=user_id,
+            device=device,
+        )
         return access_record

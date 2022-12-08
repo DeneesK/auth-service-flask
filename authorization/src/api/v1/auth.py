@@ -6,7 +6,7 @@ from flasgger.utils import swag_from
 from flask import Blueprint, current_app, jsonify, request
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
-from services.history import UserHistoryService
+from services.history import HistoryService
 from services.user import UserService
 from utils.tokens import gen_tokens
 
@@ -34,8 +34,8 @@ def login():
     )
 
     device = request.headers.get('sec-ch-ua-platform')
-    history_service = UserHistoryService()
-    history_service.add_record_user_history(user_id=user.id, device=device)
+    history_service = HistoryService()
+    history_service.store_history(user.id, device)
 
     return tokens, HTTPStatus.OK
 
