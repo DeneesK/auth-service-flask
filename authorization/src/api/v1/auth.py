@@ -6,6 +6,7 @@ from flasgger.utils import swag_from
 from flask import Blueprint, current_app, jsonify, request
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
+from services.history import UserHistoryService
 from services.user import UserService
 from utils.tokens import gen_tokens
 
@@ -31,6 +32,10 @@ def login():
         1,
         ex=current_app.config['TOKEN_REFRESH_TTL'],
     )
+
+    device = request.headers.get('sec-ch-ua-platform')
+    history_service = UserHistoryService()
+    history_service.add_record_user_history(user_id=user.id, device=device)
 
     return tokens, HTTPStatus.OK
 
@@ -76,12 +81,13 @@ def logout():
             0,
             ex=current_app.config['TOKEN_ACCESS_TTL'],
         )
+
         return '', HTTPStatus.OK
 
     return '', HTTPStatus.NO_CONTENT
 
 
-@bp.route('/logout_all', methods=['POST'])
+@bp.route('/logout-all', methods=['POST'])
 def logout_all():
     tokens = request.get_json()
     user_data = jwt.decode(
@@ -96,7 +102,7 @@ def logout_all():
     return '', HTTPStatus.OK
 
 
-@bp.route('/access_token_check', methods=['POST'])
+@bp.route('/access-check', methods=['POST'])
 def access_token_check():
     data = request.get_json()
     token = data.get('access')
