@@ -33,7 +33,7 @@ def login():
         ex=current_app.config['TOKEN_REFRESH_TTL'],
     )
 
-    device = request.headers.get('sec-ch-ua-platform')
+    device = request.headers.get('User_Agent')
     history_service = HistoryService()
     history_service.store_history(user.id, device)
 
