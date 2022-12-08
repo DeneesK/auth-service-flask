@@ -13,6 +13,11 @@ class Config:
     REDIS_PORT = environ.get('REDIS_PORT', 6379)
     TOKEN_ACCESS_TTL = 600  # in seconds
     TOKEN_REFRESH_TTL = 604800  # in seconds
+    SWAGGER = {
+        'title': 'Swagger JWT Authentiation App',
+        'uiversion': 3,
+        'doc_dir': './api/docs/',
+    }
 
 
 class ProductionConfig(Config):
