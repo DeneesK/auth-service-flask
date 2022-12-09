@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, make_response, request, url_for
 
 from schemas.role import role_data
 from services.role import RoleService
+from sqlalchemy.exc import SQLAlchemyError
 
 
 bp = Blueprint('roles', __name__, url_prefix='/roles')
@@ -16,7 +17,7 @@ def create():
         role_name = data['role_name']
         client_id = data['client_id']
         role_obj = role_service.create(role_name, client_id)
-    except Exception as e:
+    except SQLAlchemyError as e:
         return jsonify({'message': str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
     response = make_response(jsonify(role_data.dump(role_obj)), HTTPStatus.CREATED)
