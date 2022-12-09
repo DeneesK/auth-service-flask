@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from flasgger.utils import swag_from
 from flask import Blueprint, jsonify, make_response, request, url_for
+from schemas.history import history_schema
 from schemas.user import user_data
 from services.history import HistoryService
 from services.user import UserService
@@ -50,17 +51,11 @@ def remove_user(user_id):
 @bp.route('/<user_id>/history', methods=['GET'])
 def get_history(user_id):
     service = HistoryService()
-    history = service.get_history(user_id)
+    history = {'user_history': service.get_history(user_id)}
     if history:
+        user_history = history_schema.dump(history)
         return (
-            jsonify(
-                {
-                    'user_history': [
-                        {'date': str(x.access_date), 'device': x.device}
-                        for x in history
-                    ]
-                }
-            ),
+            jsonify(user_history),
             HTTPStatus.OK,
         )
     return (

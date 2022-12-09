@@ -16,6 +16,6 @@ class HistoryService:
         )
         return access_record
 
-    def get_history(self, user_id: UUID) -> list[HistoryModel, HistoryModel]:
+    def get_history(self, user_id: UUID) -> list[HistoryModel]:
         history = HistoryModel.query.filter_by(user_id=user_id).limit(10)
         return history
