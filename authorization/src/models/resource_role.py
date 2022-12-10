@@ -7,7 +7,7 @@ from db.orm import db_engine as db
 from models.resource import ResourceModel
 
 
-class ResourceRole(db.Model):
+class ResourceRoleModel(db.Model):
     """Links resource and role and action"""
     __tablename__ = 'resource_role_table'
 
