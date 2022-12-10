@@ -29,3 +29,20 @@ async def test_login(make_request, user):
 
     assert response.status == HTTPStatus.OK
     assert set(response.body.keys()) == set(['access', 'refresh'])
+
+
+async def test_token_refresh(make_request):
+    response_login = await make_request('post')(
+        'auth/login', json={'login': 'test_user', 'password': 'test_pass'}
+    )
+    tokens = response_login.body
+    response_refresh = await make_request('post')(
+        'auth/refresh', json={'refresh': tokens['refresh']}
+    )
+    assert response_refresh.status == HTTPStatus.OK
+    assert set(response_refresh.body.keys()) == set(['access', 'refresh'])
+
+
+async def test_token_refresh_not_exists(make_request, fake_token):
+    response = await make_request('post')('auth/refresh', json={'refresh': fake_token})
+    assert response.status == HTTPStatus.FORBIDDEN
