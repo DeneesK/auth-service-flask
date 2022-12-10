@@ -1,4 +1,5 @@
 import asyncio
+import secrets
 from dataclasses import dataclass
 from typing import AsyncGenerator, Optional
 
@@ -101,3 +102,8 @@ async def user(make_request):
     )
     yield response.body
     await make_request('delete')('users/{0}'.format(response.body['id']))
+
+
+@pytest.fixture
+def fake_token():
+    return secrets.token_hex(32)
