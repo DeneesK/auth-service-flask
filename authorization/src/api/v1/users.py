@@ -51,9 +51,9 @@ def remove_user(user_id):
 @bp.route('/<user_id>/history', methods=['GET'])
 def get_history(user_id):
     service = HistoryService()
-    history = {'user_history': service.get_history(user_id)}
+    history = service.get_history(user_id)
     if history:
-        user_history = history_schema.dump(history)
+        user_history = history_schema.dump({'user_history': history})
         return (
             jsonify(user_history),
             HTTPStatus.OK,

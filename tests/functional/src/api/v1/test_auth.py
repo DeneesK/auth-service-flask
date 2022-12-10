@@ -31,7 +31,7 @@ async def test_login(make_request, user):
     assert set(response.body.keys()) == set(['access', 'refresh'])
 
 
-async def test_token_refresh(make_request):
+async def test_token_refresh(make_request, user):
     response_login = await make_request('post')(
         'auth/login', json={'login': 'test_user', 'password': 'test_pass'}
     )
