@@ -17,4 +17,6 @@ class HistoryModel(db.Model):
     )
     device = db.Column(db.String, nullable=False)
     access_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'))
+    user_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey('users.id', ondelete='CASCADE')
+    )
