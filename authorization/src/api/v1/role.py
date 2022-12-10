@@ -36,3 +36,4 @@ def get_role(role_id):
 @bp.route('/delete/<role_id>', methods=['DELETE'])
 def delete(role_id):
     role_service = RoleService()
+    # TODO To be continued...
