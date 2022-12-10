@@ -54,14 +54,31 @@ async def test_user_read(make_request):
 
 
 async def test_create_existing_user(make_request):
-    await make_request('post')('users',
-    json={'login': 'test_user1', 'password': 'test_pass'},)
+    await make_request('post')(
+        'users',
+        json={'login': 'test_user1', 'password': 'test_pass'},
+    )
 
     response = await make_request('post')(
-    'users',
-    json={'login': 'test_user1', 'password': 'test_pass'},
+        'users',
+        json={'login': 'test_user1', 'password': 'test_pass'},
     )
     assert response.status == HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+async def test_get_user_history(make_request):
+    await make_request('post')(
+        'auth/login', json={'login': 'test_user', 'password': 'test_pass'}
+    )
+    r = await make_request('get')('users/{0}/history'.format(USER_ID))
+    assert r.status == HTTPStatus.OK
+    assert r.body.keys() == set(['user_history'])
+    assert r.body['user_history'][0].keys() == set(['access_date', 'device'])
+
+
+async def test_history_by_not_exists_user_id(make_request):
+    r = await make_request('get')('users/{0}/history'.format(uuid4()))
+    assert r.status == HTTPStatus.NOT_FOUND
 
 
 async def test_user_remove_exist(make_request):
