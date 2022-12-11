@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 import jwt
 from flasgger.utils import swag_from
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, request
 from marshmallow.exceptions import ValidationError
 from schemas.user import user_data
 from services.history import HistoryService
@@ -20,7 +20,7 @@ def login():
     try:
         login_data = user_data.load(data)
     except ValidationError as err:
-        return jsonify(err.messages), HTTPStatus.BAD_REQUEST
+        return err.messages, HTTPStatus.BAD_REQUEST
 
     user = UserService().get_by_credentials(**login_data)
     if user is None:
