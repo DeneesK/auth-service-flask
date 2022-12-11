@@ -44,3 +44,15 @@ def delete(role_id):
         jsonify({'message': f'Role with id {role_id} not found'}),
         HTTPStatus.NOT_FOUND,
     )
+
+
+@bp.route('/check/<action>/<user_id>/<resource_id>', methods=['GET'])
+def check(action, user_id, resource_id):
+    service = RoleService()
+    result = service.check_user_rights(user_id, resource_id, action.upper())
+    if result:
+        return jsonify({'message': f'Access granted'}), HTTPStatus.OK
+    return (
+        jsonify({'message': f'Access denied'}),
+        HTTPStatus.FORBIDDEN,
+    )
