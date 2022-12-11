@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from db.orm import db_engine as db
 from models.resource import ResourceModel
+from models.role import RoleModel  # ok
 
 
 class ResourceRoleModel(db.Model):
@@ -25,5 +26,8 @@ class ResourceRoleModel(db.Model):
 
     action = db.Column(Enum('view', 'delete', 'edit', name='resource_action', create_type=True))
 
-    resource = db.relationship(ResourceModel,
-                               back_populates='permission')
+    resource = db.relationship(ResourceModel, back_populates='permission')
+    role = db.relationship(RoleModel, back_populates='permission')
+
+
+print("After set ResourceRoleModel.role")
