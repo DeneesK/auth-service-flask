@@ -33,7 +33,14 @@ def get_role(role_id):
     else:
         return jsonify(role_data.dump(role)), HTTPStatus.OK
 
+
 @bp.route('/delete/<role_id>', methods=['DELETE'])
 def delete(role_id):
-    role_service = RoleService()
-    # TODO To be continued...
+    service = RoleService()
+    result = service.delete(role_id)
+    if result:
+        return jsonify({'message': f'Role with id {role_id} deleted'}), HTTPStatus.OK
+    return (
+        jsonify({'message': f'Role with id {role_id} not found'}),
+        HTTPStatus.NOT_FOUND,
+    )
