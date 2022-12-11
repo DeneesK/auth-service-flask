@@ -1,4 +1,5 @@
 from db.orm import db_engine
+from models import ResourceRoleModel
 from models.role import RoleModel
 
 
@@ -21,3 +22,7 @@ class RoleService:
             return True
         else:
             return False
+
+    def check_user_rights(self, user_id, resource_id, action):
+        roles_to_resource_and_action = ResourceRoleModel.query()
+        permission_record = ResourceRoleModel.query()

@@ -4,6 +4,7 @@ from sqlalchemy import Enum
 from sqlalchemy.dialects.postgresql import UUID
 
 from db.orm import db_engine as db
+from models.actions import UserActions
 from models.resource import ResourceModel
 from models.role import RoleModel  # ok
 
@@ -24,7 +25,7 @@ class ResourceRoleModel(db.Model):
     role_id = db.Column(UUID(as_uuid=True),
                         db.ForeignKey('roles.id'))
 
-    action = db.Column(Enum('view', 'delete', 'edit', name='resource_action', create_type=True))
+    action = db.Column(Enum(UserActions), name='resource_action', create_type=True)
 
     resource = db.relationship(ResourceModel, back_populates='permission')
     role = db.relationship(RoleModel, back_populates='permission')
