@@ -6,6 +6,7 @@ from flask import Blueprint
 # TODO Move to API files later.
 
 from schemas.resource import resource_data
+from schemas.resource_role import resource_role_data
 
 bp = Blueprint('v1', __name__, url_prefix='/v1')
 

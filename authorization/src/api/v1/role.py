@@ -32,3 +32,8 @@ def get_role(role_id):
         return '', HTTPStatus.NOT_FOUND
     else:
         return jsonify(role_data.dump(role)), HTTPStatus.OK
+
+@bp.route('/delete/<role_id>', methods=['DELETE'])
+def delete(role_id):
+    role_service = RoleService()
+    # TODO To be continued...
