@@ -31,7 +31,7 @@ class UserService:
 
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
-    
+
     def delete(self, user_id):
         user = UserModel.query.get(user_id)
         if user:
@@ -44,3 +44,12 @@ class UserService:
         user = UserModel.query.filter(UserModel.login == login).one_or_none()
         if user and user.password == crypt(password, user.password):
             return user
+
+    def change_password(self, user, new_password):
+        hashed_password = crypt(
+            new_password,
+            '.' + random_string(random.randint(10, 20)),
+            iterations=self.password_hash_iterations,
+        )
+        user.password = hashed_password
+        db_engine.session.commit()

@@ -62,3 +62,17 @@ def get_history(user_id):
         jsonify({'message': 'User or user history not found'}),
         HTTPStatus.NOT_FOUND,
     )
+
+
+@bp.route('/<user_id>/сhange-password', methods=['POST'])
+def change_password(user_id):
+    data = request.get_json()
+    old_password = data['old_password']
+    service = UserService()
+    user_login = service.get(user_id).login
+    user = service.get_by_credentials(user_login, old_password)
+    if user:
+        new_password = data['new_password']
+        service.change_password(user, new_password)
+        return '', HTTPStatus.OK
+    return '', HTTPStatus.FORBIDDEN
