@@ -1,5 +1,5 @@
 from db.orm import db_engine
-from models import ResourceRoleModel
+from models import ResourceRoleModel, UserRoleModel, UserModel, ResourceModel
 from models.role import RoleModel
 
 
@@ -23,6 +23,13 @@ class RoleService:
         else:
             return False
 
-    def check_user_rights(self, user_id, resource_id, action):
-        roles_to_resource_and_action = ResourceRoleModel.query()
-        permission_record = ResourceRoleModel.query()
+    def check_user_rights(self, user_id, resource_id, action) -> bool:
+        # TODO Rewrite with one query with JOIN.
+        roles_to_resource_and_action = ResourceRoleModel.query.filter(resource_id=resource_id,
+                                                                      action=action)
+        # ^ Here are roles for resource and action
+        permission_record = UserRoleModel.query.filter(user_id=user_id)
+        # ^ Here are roles for the user
+        resource_roles_set = set(res_role.role_id for res_role in roles_to_resource_and_action)
+        user_role_set = set(user_role.role_id for user_role in permission_record)
+        return bool(resource_roles_set & user_role_set)
