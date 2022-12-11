@@ -11,6 +11,13 @@ from sqlalchemy.exc import IntegrityError
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 
+@bp.route('', methods=['GET'])
+def get_users():
+    service = UserService()
+    users = service.all()
+    return jsonify(user_data.dump(users, many=True)), HTTPStatus.OK
+
+
 @bp.route('', methods=['POST'])
 @swag_from('../docs/user_creation.yml', methods=['Post'])
 def create():

@@ -32,6 +32,9 @@ class UserService:
     def get(self, user_id) -> UserModel:
         return UserModel.query.get(user_id)
 
+    def all(self) -> list[UserModel]:
+        return UserModel.query.all()
+
     def delete(self, user_id):
         user = UserModel.query.get(user_id)
         if user:
