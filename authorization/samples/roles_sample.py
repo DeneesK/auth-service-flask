@@ -1,18 +1,18 @@
 """An example to use roles and resources."""
-from flask import Flask
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://app:<password>@localhost/auth'
 from db.orm import db_engine
-db_engine.init_app(app)
-app.app_context().push()
-from models.role import RoleModel
+from flask import Flask
 from models.resource import ResourceModel
 from models.resource_role import ResourceRoleModel
-from schemas.resource import ResourceData  # <- to execute 'permission' set
+from models.role import RoleModel
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://app:<password>@localhost/auth'
+
+db_engine.init_app(app)
+app.app_context().push()
 
 role1 = RoleModel(name='role1', client_service_id='eweq')
 role2 = RoleModel(name='role2', client_service_id='eweq')
-
 
 db_engine.session.add(role1)
 db_engine.session.add(role2)

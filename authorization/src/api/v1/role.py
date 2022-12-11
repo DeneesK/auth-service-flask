@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 from flask import Blueprint, make_response, request, url_for
-from schemas.role import role_data
 from services.role import RoleService
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -19,7 +18,7 @@ def create():
     except SQLAlchemyError as e:
         return {'message': str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    response = make_response(role_data.dump(role_obj), HTTPStatus.CREATED)
+    response = make_response(role_obj, HTTPStatus.CREATED)
     response.location = url_for('.get_role', role_id=role_obj.id, _external=True)
     return response
 
@@ -30,7 +29,7 @@ def get_role(role_id):
     if role is None:
         return '', HTTPStatus.NOT_FOUND
     else:
-        return role_data.dump(role), HTTPStatus.OK
+        return role, HTTPStatus.OK
 
 
 @bp.route('/delete/<role_id>', methods=['DELETE'])

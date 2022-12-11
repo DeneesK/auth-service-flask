@@ -2,8 +2,6 @@ from http import HTTPStatus
 
 from flasgger.utils import swag_from
 from flask import Blueprint, make_response, request, url_for
-from schemas.history import history_schema
-from schemas.user import user_data
 from services.history import HistoryService
 from services.user import UserService
 from sqlalchemy.exc import IntegrityError
@@ -15,7 +13,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 def get_users():
     service = UserService()
     users = service.all()
-    return user_data.dump(users, many=True), HTTPStatus.OK
+    return users, HTTPStatus.OK
 
 
 @bp.route('', methods=['POST'])
@@ -28,7 +26,7 @@ def create():
     except IntegrityError as er:
         return {'message': str(er.orig)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    response = make_response(user_data.dump(user), HTTPStatus.CREATED)
+    response = make_response(user, HTTPStatus.CREATED)
     response.location = url_for('.get_user', user_id=user.id, _external=True)
     return response
 
@@ -38,8 +36,7 @@ def get_user(user_id):
     user = UserService().get(user_id)
     if user is None:
         return '', HTTPStatus.NOT_FOUND
-    else:
-        return user_data.dump(user), HTTPStatus.OK
+    return user, HTTPStatus.OK
 
 
 @bp.route('/<user_id>', methods=['DELETE'])
@@ -57,8 +54,7 @@ def get_history(user_id):
     service = HistoryService()
     history = service.get_history(user_id)
     if history:
-        user_history = history_schema.dump({'user_history': history})
-        return user_history, HTTPStatus.OK
+        return history, HTTPStatus.OK
     return {'message': 'User or user history not found'}, HTTPStatus.NOT_FOUND
 
 

@@ -80,8 +80,7 @@ async def test_get_user_history(make_request):
     )
     r = await make_request('get')('users/{0}/history'.format(USER_ID))
     assert r.status == HTTPStatus.OK
-    assert r.body.keys() == set(['user_history'])
-    assert r.body['user_history'][0].keys() == set(['access_date', 'device'])
+    assert r.body[0].keys() == set(['access_date', 'device'])
 
 
 async def test_history_by_not_exists_user_id(make_request):

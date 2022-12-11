@@ -1,3 +1,7 @@
+# Api Documentation
+
+After starting the project, you will have access to the project documentation: [localhost:5000/apidocs]( http://localhost:5000/apidocs)
+
 # Development
 
 ## Run auth app in dev mode
@@ -13,6 +17,5 @@ Install [pre-commit](https://pypi.org/project/pre-commit/) python package to you
 
 Change your current directory to **tests/functional** then copy **.env.sample** to **.env** and execute `docker-compose up tests --no-log-prefix` to run tests.
 
-## Documentation
-
-After starting the project, you will have access to the project documentation: [localhost:5000/apidocs]( http://localhost:5000/apidocs)
+## Naming conventions
+Use **Data** postfix (eg. `UserData`) for marshmallow schema classes to use a feature of automatic sqlachemy objects serialization. It allows return sqlalchemy objects from flask view functions and also use them in **make_response** function.
