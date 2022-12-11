@@ -10,5 +10,14 @@ class RoleService:
         db_engine.session.commit()
         return new_role
 
-    def get(self, user_id) -> RoleModel:
-        return RoleModel.query.get(user_id)
+    def get(self, role_id) -> RoleModel:
+        return RoleModel.query.get(role_id)
+
+    def delete(self, role_id):
+        role = RoleModel.query.get(role_id)
+        if role:
+            db_engine.session.delete(role)
+            db_engine.session.commit()
+            return True
+        else:
+            return False
