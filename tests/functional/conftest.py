@@ -42,7 +42,7 @@ async def pg_connection() -> AsyncGenerator[aiopg.connection.Connection, None]:
             yield conn
 
             async with conn.cursor() as cur:
-                await cur.execute('TRUNCATE users CASCADE;')
+                await cur.execute(('TRUNCATE users CASCADE;' 'TRUNCATE roles CASCADE;'))
 
 
 @pytest_asyncio.fixture(scope='module')
@@ -102,6 +102,16 @@ async def user(make_request):
     )
     yield response.body
     await make_request('delete')('users/{0}'.format(response.body['id']))
+
+
+@pytest_asyncio.fixture
+async def role_fixture(make_request):
+    response = await make_request('post')(
+        'roles',
+        json={'role_name': 'test_role', 'client_service_id': 'test_client_id'},
+    )
+    yield response.body
+    await make_request('delete')('roles/{0}'.format(response.body['id']))
 
 
 @pytest.fixture

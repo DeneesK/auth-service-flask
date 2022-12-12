@@ -7,13 +7,18 @@ from sqlalchemy.exc import SQLAlchemyError
 bp = Blueprint('roles', __name__, url_prefix='/roles')
 
 
+@bp.route('', methods=['GET'])
+def get_roles():
+    return RoleService().all()
+
+
 @bp.route('', methods=['POST'])
 def create():
     role_service = RoleService()
     try:
         data = request.get_json()
         role_name = data['role_name']
-        client_id = data['client_id']
+        client_id = data['client_service_id']
         role_obj = role_service.create(role_name, client_id)
     except SQLAlchemyError as e:
         return {'message': str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
@@ -48,8 +53,5 @@ def check(action, user_id, resource_id):
     service = RoleService()
     result = service.check_user_rights(user_id, resource_id, action.upper())
     if result:
-        return jsonify({'message': f'Access granted'}), HTTPStatus.OK
-    return (
-        jsonify({'message': f'Access denied'}),
-        HTTPStatus.FORBIDDEN,
-    )
+        return {'message': 'Access granted'}, HTTPStatus.OK
+    return {'message': 'Access denied'}, HTTPStatus.FORBIDDEN
