@@ -43,7 +43,6 @@ async def test_user_create(make_request):
 async def test_user_read_notexists(make_request):
     response = await make_request('get')('users/{0}'.format(str(uuid4())))
     assert response.status == HTTPStatus.NOT_FOUND
-    assert response.body == ''
 
 
 async def test_user_read(make_request):
