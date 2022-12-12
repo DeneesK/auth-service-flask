@@ -16,7 +16,7 @@ def random_string(length):
 class UserService:
     password_hash_iterations = 100
 
-    def create(self, login, password) -> (bool, str):
+    def create(self, login, password) -> UserModel:
         """We hash the password here.
         :returns: Success or not"""
         hashed_password = crypt(

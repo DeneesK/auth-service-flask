@@ -1,5 +1,7 @@
 import uuid
 
+from sqlalchemy.orm import relationship
+
 from db.orm import db_engine as db
 from sqlalchemy.dialects.postgresql import UUID
 

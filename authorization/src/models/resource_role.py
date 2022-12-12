@@ -1,6 +1,7 @@
 import uuid
 
 from db.orm import db_engine as db
+from models.actions import UserActions
 from models.resource import ResourceModel
 from models.role import RoleModel  # ok
 from sqlalchemy import Enum
@@ -24,8 +25,7 @@ class ResourceRoleModel(db.Model):
     role_id = db.Column(UUID(as_uuid=True), db.ForeignKey('roles.id'))
 
     action = db.Column(
-        Enum('view', 'delete', 'edit', name='resource_action', create_type=True)
-    )
+        Enum(UserActions), name='resource_action') # , create_type=True - doesn't work. Why?
 
     resource = db.relationship(ResourceModel, back_populates='permission')
     role = db.relationship(RoleModel, back_populates='permission')
