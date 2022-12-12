@@ -7,6 +7,3 @@ class UserData(SQLAlchemyAutoSchema):
         model = UserModel
 
     password = auto_field(load_only=True)
-
-
-user_data = UserData()

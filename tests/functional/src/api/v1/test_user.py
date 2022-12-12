@@ -53,6 +53,14 @@ async def test_user_read(make_request):
     assert response.body['id'] == USER_ID
 
 
+# This test relies on test before it.
+async def test_users_read(make_request):
+    response = await make_request('get')('users')
+    assert response.status == HTTPStatus.OK
+    assert isinstance(response.body, list)
+    assert response.body[0]['id'] == USER_ID
+
+
 async def test_create_existing_user(make_request):
     await make_request('post')(
         'users',
@@ -72,8 +80,7 @@ async def test_get_user_history(make_request):
     )
     r = await make_request('get')('users/{0}/history'.format(USER_ID))
     assert r.status == HTTPStatus.OK
-    assert r.body.keys() == set(['user_history'])
-    assert r.body['user_history'][0].keys() == set(['access_date', 'device'])
+    assert r.body[0].keys() == set(['access_date', 'device'])
 
 
 async def test_history_by_not_exists_user_id(make_request):

@@ -1,13 +1,18 @@
 """An example to use roles and resources."""
+from db.orm import db_engine
 import datetime
 from flask import Flask
+from models.resource import ResourceModel
+from models.resource_role import ResourceRoleModel
+from models.role import RoleModel
+
 
 from models import UserRoleModel
 from services.user import UserService
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://app:<password>@localhost/auth'
-from db.orm import db_engine
+
 db_engine.init_app(app)
 app.app_context().push()
 from models.role import RoleModel
@@ -20,7 +25,6 @@ random_mark = str(datetime.datetime.now())
 client_service_id = 'ddfsd'+ random_mark
 role1 = RoleModel(name='role1'+random_mark, client_service_id=client_service_id)
 role2 = RoleModel(name='role2'+random_mark, client_service_id=client_service_id)
-
 
 db_engine.session.add(role1)
 db_engine.session.add(role2)

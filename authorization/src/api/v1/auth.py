@@ -3,9 +3,9 @@ from http import HTTPStatus
 
 import jwt
 from flasgger.utils import swag_from
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, request
 from marshmallow.exceptions import ValidationError
-from schemas.user import user_data
+from schemas import UserData
 from services.history import HistoryService
 from services.user import UserService
 from utils.tokens import gen_tokens
@@ -16,11 +16,10 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/login', methods=['POST'])
 @swag_from('../docs/auth_login.yml', methods=['Post'])
 def login():
-    data = request.get_json()
     try:
-        login_data = user_data.load(data)
+        login_data = UserData().load(request.get_json())
     except ValidationError as err:
-        return jsonify(err.messages), HTTPStatus.BAD_REQUEST
+        return err.messages, HTTPStatus.BAD_REQUEST
 
     user = UserService().get_by_credentials(**login_data)
     if user is None:

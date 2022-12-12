@@ -1,10 +1,10 @@
 from os import environ
 
 from api.v1 import bp
+from core.flask import Flask
 from db.init import init_db
 from ext.redis import RedisExtension
 from flasgger import Swagger
-from flask import Flask
 from flask_marshmallow import Marshmallow
 from werkzeug.utils import import_string
 
