@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from flask import Blueprint, make_response, request, url_for
+from flask import Blueprint, make_response, request, url_for, jsonify
 from services.role import RoleService
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -38,7 +38,9 @@ def delete(role_id):
     result = service.delete(role_id)
     if result:
         return {'message': f'Role with id {role_id} deleted'}, HTTPStatus.OK
-    return {'message': f'Role with id {role_id} not found'}, HTTPStatus.NOT_FOUND
+    else:
+        return {'message': f'Role with id {role_id} not deleted, something went wrong'}, \
+               HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 @bp.route('/check/<action>/<user_id>/<resource_id>', methods=['GET'])
