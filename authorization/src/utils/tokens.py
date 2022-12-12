@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 
 import jwt
 from models.user import UserModel
-from schemas.user import user_data
+from schemas import UserData
 
 
 def _gen_access(user: UserModel, secret_key: str, time_out: int = 600) -> str:
     time_now = datetime.now()
-    payload = user_data.dump(user)
+    payload = UserData().dump(user)
     payload.update(
         {
             'exp': time_now + timedelta(seconds=time_out),
