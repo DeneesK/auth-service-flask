@@ -68,17 +68,16 @@ class UserService:
         self.get(user_id)  # Check that the user exists
         role_service = RoleService()
         role_service.get(role_id)  # Check that the role exists
-        user_role = UserRoleModel(user_id=user_id, role_id=role_id)
+        user_role = UserRoleModel.get(user_id=user_id, role_id=role_id)
         db_engine.session.add(user_role)
         # user_obj.roles.append(role_obj) <- doesn't work
         db_engine.session.commit()
 
     def revoke_role(self, user_id, role_id):
-        user_obj = self.get(user_id)
-        role_service = RoleService()
-        role_obj = role_service.get(role_id)
-        if role_obj in user_obj.roles:
-            user_obj.roles.remove(role_obj)
-            db_engine.session.commit()
+        user_role = UserRoleModel.query.filter_by(user_id=user_id, role_id=role_id).all()
+        print('user_role', user_role)
+        if user_role:
+            for itm in user_role:
+                db_engine.session.delete(itm)
         else:
             raise ObjectNotFoundException('Role for user', role_id)
