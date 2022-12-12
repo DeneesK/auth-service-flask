@@ -110,7 +110,6 @@ async def role_fixture(make_request):
         'roles',
         json={'role_name': 'test_role', 'client_service_id': 'test_client_id'},
     )
-    print(response.body)
     yield response.body
     await make_request('delete')('roles/{0}'.format(response.body['id']))
 
