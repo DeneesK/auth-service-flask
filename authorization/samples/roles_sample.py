@@ -2,9 +2,6 @@
 from db.orm import db_engine
 import datetime
 from flask import Flask
-from models.resource import ResourceModel
-from models.resource_role import ResourceRoleModel
-from models.role import RoleModel
 
 
 from models import UserRoleModel
