@@ -10,6 +10,7 @@ from models.user import UserModel
 
 class UserRoleModel(db.Model):
     """Links resource and role and action"""
+    # TODO Add unique index for user_id/role_id.
     __tablename__ = 'user_role_table'
 
     id = db.Column(UUID(as_uuid=True),
