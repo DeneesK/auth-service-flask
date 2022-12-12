@@ -6,6 +6,8 @@ from services.history import HistoryService
 from services.user import UserService
 from sqlalchemy.exc import IntegrityError
 
+from api.exception_handling import handle_obj_not_found
+
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 
@@ -32,10 +34,9 @@ def create():
 
 
 @bp.route('/<user_id>', methods=['GET'])
+@handle_obj_not_found
 def get_user(user_id):
     user = UserService().get(user_id)
-    if user is None:
-        return '', HTTPStatus.NOT_FOUND
     return user, HTTPStatus.OK
 
 
@@ -70,3 +71,19 @@ def change_password(user_id):
         service.change_password(user, new_password)
         return '', HTTPStatus.OK
     return '', HTTPStatus.FORBIDDEN
+
+
+@bp.route('/<user_id>/assign-role/<role_id>', methods=['POST'])
+@handle_obj_not_found
+def assign_role(user_id, role_id):
+    service = UserService()
+    service.assign_role(user_id, role_id)
+    return {'message': 'The role was assigned'}, HTTPStatus.OK
+
+
+@bp.route('/<user_id>/revoke-role/<role_id>', methods=['DELETE'])
+@handle_obj_not_found
+def revoke_role(user_id, role_id):
+    service = UserService()
+    service.revoke_role(user_id, role_id)
+    return {'message': 'The role was revoked'}, HTTPStatus.OK

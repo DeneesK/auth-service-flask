@@ -1,6 +1,7 @@
 from db.orm import db_engine
 from models import ResourceRoleModel, UserModel, UserRoleModel
 from models.role import RoleModel
+from services.exceptions import ObjectNotFoundException
 
 
 class RoleService:
@@ -11,7 +12,10 @@ class RoleService:
         return new_role
 
     def get(self, role_id) -> RoleModel:
-        return RoleModel.query.get(role_id)
+        obj = RoleModel.query.get(role_id)
+        if not obj:
+            raise ObjectNotFoundException('Role', role_id)
+        return obj
 
     def all(self) -> list[UserModel]:
         return RoleModel.query.all()
