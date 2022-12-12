@@ -24,6 +24,7 @@ class UserRoleModel(db.Model):
 
     role_id = db.Column(UUID(as_uuid=True),
                         db.ForeignKey('roles.id'))
+    __table_args__ = (db.Index('user_role_index', "user_id", "role_id"),)
 
     user = db.relationship(UserModel, back_populates='user_role')
     role = db.relationship(RoleModel, back_populates='user_role')
