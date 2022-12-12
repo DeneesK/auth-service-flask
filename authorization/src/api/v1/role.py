@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
-from flask import Blueprint, make_response, request, url_for, jsonify
+from flask import Blueprint, make_response, request, url_for
+from schemas import RoleData
 from services.role import RoleService
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -28,6 +29,16 @@ def create():
     return response
 
 
+@bp.route('/<role_id>', methods=['PUT'])
+def update_role(role_id):
+    role_data = RoleData().load(request.get_json())
+    # Don't allow to change role id
+    if str(role_data['id']) != role_id:
+        return {'message': 'ID change is restricted'}, HTTPStatus.BAD_REQUEST
+    RoleService().update(**role_data)
+    return '', HTTPStatus.NO_CONTENT
+
+
 @bp.route('/<role_id>', methods=['GET'])
 def get_role(role_id):
     role = RoleService().get(role_id)
@@ -44,8 +55,9 @@ def delete(role_id):
     if result:
         return {'message': f'Role with id {role_id} deleted'}, HTTPStatus.OK
     else:
-        return {'message': f'Role with id {role_id} not deleted, something went wrong'}, \
-               HTTPStatus.INTERNAL_SERVER_ERROR
+        return {
+            'message': f'Role with id {role_id} not deleted, something went wrong'
+        }, HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 @bp.route('/check/<action>/<user_id>/<resource_id>', methods=['GET'])
