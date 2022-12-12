@@ -10,4 +10,6 @@ class Flask(BaseFlask):
             # suppose body, status, header tuple here
             rv[0] = serialize(rv[0])
             rv = tuple(rv)
+        else:
+            rv = serialize(rv)
         return super().make_response(rv)
