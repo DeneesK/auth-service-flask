@@ -1,3 +1,4 @@
+import uuid
 from http import HTTPStatus
 
 import pytest
@@ -11,6 +12,15 @@ async def test_roles_read(make_request, role_fixture):
     assert response.status == HTTPStatus.OK
     assert isinstance(response.body, list)
     assert response.body[0]['id'] == role_fixture['id']
+
+
+async def test_role_update_idchange(make_request, role_fixture):
+    """Don't allow to change role id. Try to change role id with zero id."""
+    put_resp = await make_request('put')(
+        'roles/{0}'.format(role_fixture['id']),
+        {**role_fixture, 'id': str(uuid.UUID(int=0))},
+    )
+    assert put_resp.status == HTTPStatus.BAD_REQUEST
 
 
 async def test_role_update(make_request, role_fixture):
