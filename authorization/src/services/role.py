@@ -11,6 +11,12 @@ class RoleService:
         db_engine.session.commit()
         return new_role
 
+    def update(self, **kwargs):
+        db_engine.session.query(RoleModel).filter(RoleModel.id == kwargs['id']).update(
+            values=kwargs
+        )
+        db_engine.session.commit()
+
     def get(self, role_id) -> RoleModel:
         obj = RoleModel.query.get(role_id)
         if not obj:

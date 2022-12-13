@@ -111,7 +111,7 @@ async def role_fixture(make_request):
         json={'role_name': 'test_role', 'client_service_id': 'test_client_id'},
     )
     yield response.body
-    await make_request('delete')('roles/{0}'.format(response.body['id']))
+    await make_request('delete')('roles/delete/{0}'.format(response.body['id']))
 
 
 @pytest.fixture
