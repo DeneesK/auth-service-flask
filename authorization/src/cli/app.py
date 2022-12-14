@@ -6,7 +6,6 @@ from flask.cli import with_appcontext
 from main import app
 from models import RoleModel, UserRoleModel
 
-from services.role import RoleService
 from services.user import UserService
 from db.orm import db_engine
 
@@ -27,12 +26,6 @@ def create_superuser(login):
         assert db_admin_role
         user_role = UserRoleModel(user_id=user.id, role_id=db_admin_role.id)
         db_engine.session.add(user_role)
-
-
-def create_role(role_name, client_id):
-    service = RoleService()
-    role = service.create(role_name, client_id)
-    return role
 
 
 app.cli.add_command(create_superuser)
