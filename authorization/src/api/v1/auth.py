@@ -25,7 +25,12 @@ def login():
     if user is None:
         return '', HTTPStatus.FORBIDDEN
 
-    tokens = gen_tokens(user, current_app.config['TOKEN_SECRET_KEY'])
+    tokens = gen_tokens(
+        user,
+        current_app.config['TOKEN_SECRET_KEY'],
+        current_app.config['TOKEN_ACCESS_TTL'],
+        current_app.config['TOKEN_REFRESH_TTL'],
+    )
     current_app.extensions['redis'].set(
         'refresh:{0}'.format(tokens['refresh']),
         1,
@@ -56,7 +61,12 @@ def token_refresh():
         )
         user = UserService().get(user_data['id'])
         if user:
-            tokens = gen_tokens(user, current_app.config['TOKEN_SECRET_KEY'])
+            tokens = gen_tokens(
+                user,
+                current_app.config['TOKEN_SECRET_KEY'],
+                current_app.config['TOKEN_ACCESS_TTL'],
+                current_app.config['TOKEN_REFRESH_TTL'],
+            )
             current_app.extensions['redis'].set(
                 'refresh:{0}'.format(tokens['refresh']),
                 1,
