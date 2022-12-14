@@ -47,6 +47,7 @@ def login():
 
 
 @bp.route('/refresh', methods=['POST'])
+@swag_from('../docs/refresh.yml', methods=['Post'])
 def token_refresh():
     data = request.get_json()
     token = data.get('refresh')
@@ -79,6 +80,7 @@ def token_refresh():
 
 
 @bp.route('/logout', methods=['POST'])
+@swag_from('../docs/logout.yml', methods=['Post'])
 def logout():
     tokens = request.get_json()
     response = current_app.extensions['redis'].get(
@@ -99,6 +101,7 @@ def logout():
 
 
 @bp.route('/logout-all', methods=['POST'])
+@swag_from('../docs/logout_all.yml', methods=['Post'])
 def logout_all():
     tokens = request.get_json()
     user_data = jwt.decode(
@@ -114,6 +117,7 @@ def logout_all():
 
 
 @bp.route('/access-check', methods=['POST'])
+@swag_from('../docs/access_check.yml', methods=['Post'])
 def access_token_check():
     data = request.get_json()
     token = data.get('access')
