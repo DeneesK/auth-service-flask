@@ -1,3 +1,5 @@
+from getpass import getpass
+from uuid import uuid4
 
 import click
 from flask.cli import with_appcontext
@@ -15,16 +17,16 @@ from db.orm import db_engine
 def create_superuser(login):
     """The password will be promted"""
     user_service = UserService()
-    password = input("Input password:")  # TODO Hide letters
-    user = user_service.create(login, password)
-    # TODO make a transaction. How to get user.id within one transaction?
-    model = RoleModel()
-    db_admin_role = model.query.filter_by(name='admin').first()
-    print("admin role", db_admin_role)
-    assert db_admin_role
-    user_role = UserRoleModel(user_id=user.id, role_id=db_admin_role.id)
-    db_engine.session.add(user_role)
-    db_engine.session.commit()
+    password = getpass("Input password:")
+
+    with db_engine.session.begin():
+        user = user_service.create(login, password, commit=False)
+        user.id = uuid4()
+        model = RoleModel()
+        db_admin_role = model.query.filter_by(name='admin').first()
+        assert db_admin_role
+        user_role = UserRoleModel(user_id=user.id, role_id=db_admin_role.id)
+        db_engine.session.add(user_role)
 
 
 def create_role(role_name, client_id):
