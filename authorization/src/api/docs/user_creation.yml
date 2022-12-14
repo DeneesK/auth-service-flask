@@ -1,12 +1,11 @@
 Create new user
 ---
 tags:
-  - user_creation
+  - user creation
 parameters:
   - in: body
     name: body
     schema:
-      id: UserService
       required:
         - login
         - password
@@ -32,10 +31,5 @@ responses:
           type: string
           description: login
           default: null
-  400:
-    description: Bad request response
-    schema:
-      properties:
-        message:
-          type: string
-          description: Response message
+  500:
+    description: INTERNAL SERVER ERROR

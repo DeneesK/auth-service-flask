@@ -1,7 +1,7 @@
 Delete user
 ---
 tags:
-- user_remove
+- user delete
 parameters:
   - name: user_id
     in: path

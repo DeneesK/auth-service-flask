@@ -1,27 +1,21 @@
-Login, get access and refresh tokens
+Get new access and refresh tokens
 ---
 tags:
-  - auth
+  - refresh token
 parameters:
   - in: body
     name: body
     schema:
-      id: UserModel
       required:
-        - login
-        - password
+        - refresh_token
       properties:
-        login:
+        refresh:
           type: string
-          description: The user's username.
-          default: "JohnDoe"
-        password:
-          type: string
-          description: The user's password.
-          default: "Qwerty123"
+          description: Refresh token
+          default: null
 responses:
   200:
-    description: Message that user was created
+    description: Get new refresh and access tokens
     schema:
       properties:
         access:
@@ -34,6 +28,3 @@ responses:
           default: null
   403:
     description: Forbidden
-
-  400:
-    description: Bad request response

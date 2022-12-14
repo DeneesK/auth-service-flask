@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from flasgger.utils import swag_from
 from flask import Blueprint, make_response, request, url_for
 from schemas import RoleData
 from services.role import RoleService
@@ -9,11 +10,13 @@ bp = Blueprint('roles', __name__, url_prefix='/roles')
 
 
 @bp.route('', methods=['GET'])
+@swag_from('../docs/get_role.yml', methods=['Get'])
 def get_roles():
     return RoleService().all()
 
 
 @bp.route('', methods=['POST'])
+@swag_from('../docs/create_role.yml', methods=['Post'])
 def create():
     role_service = RoleService()
     try:
@@ -30,6 +33,7 @@ def create():
 
 
 @bp.route('/<role_id>', methods=['PUT'])
+@swag_from('../docs/update_role.yml', methods=['Put'])
 def update_role(role_id):
     role_data = RoleData().load(request.get_json())
     # Don't allow to change role id
@@ -49,6 +53,7 @@ def get_role(role_id):
 
 
 @bp.route('/delete/<role_id>', methods=['DELETE'])
+@swag_from('../docs/delete_role.yml', methods=['Delete'])
 def delete(role_id):
     service = RoleService()
     result = service.delete(role_id)
@@ -61,6 +66,7 @@ def delete(role_id):
 
 
 @bp.route('/check/<action>/<user_id>/<resource_id>', methods=['GET'])
+@swag_from('../docs/check_role.yml', methods=['Get'])
 def check(action, user_id, resource_id):
     service = RoleService()
     result = service.check_user_rights(user_id, resource_id, action.upper())

@@ -1,17 +1,17 @@
 from http import HTTPStatus
 
+from api.exception_handling import handle_obj_not_found
 from flasgger.utils import swag_from
 from flask import Blueprint, make_response, request, url_for
 from services.history import HistoryService
 from services.user import UserService
 from sqlalchemy.exc import IntegrityError
 
-from api.exception_handling import handle_obj_not_found
-
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('', methods=['GET'])
+@swag_from('../docs/users_list.yml', methods=['Get'])
 def get_users():
     service = UserService()
     users = service.all()
@@ -35,6 +35,7 @@ def create():
 
 @bp.route('/<user_id>', methods=['GET'])
 @handle_obj_not_found
+@swag_from('../docs/get_user.yml', methods=['Get'])
 def get_user(user_id):
     user = UserService().get(user_id)
     return user, HTTPStatus.OK
@@ -51,6 +52,7 @@ def remove_user(user_id):
 
 
 @bp.route('/<user_id>/history', methods=['GET'])
+@swag_from('../docs/history.yml', methods=['Get'])
 def get_history(user_id):
     service = HistoryService()
     history = service.get_history(user_id)
@@ -60,6 +62,7 @@ def get_history(user_id):
 
 
 @bp.route('/<user_id>/сhange-password', methods=['POST'])
+@swag_from('../docs/сhange_password.yml', methods=['Post'])
 def change_password(user_id):
     data = request.get_json()
     old_password = data['old_password']
@@ -75,6 +78,7 @@ def change_password(user_id):
 
 @bp.route('/<user_id>/assign-role/<role_id>', methods=['POST'])
 @handle_obj_not_found
+@swag_from('../docs/assign_role.yml', methods=['Post'])
 def assign_role(user_id, role_id):
     service = UserService()
     service.assign_role(user_id, role_id)
@@ -83,6 +87,7 @@ def assign_role(user_id, role_id):
 
 @bp.route('/<user_id>/revoke-role/<role_id>', methods=['DELETE'])
 @handle_obj_not_found
+@swag_from('../docs/revoke_role.yml', methods=['Delete'])
 def revoke_role(user_id, role_id):
     service = UserService()
     service.revoke_role(user_id, role_id)
