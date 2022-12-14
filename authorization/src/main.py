@@ -1,4 +1,5 @@
 from os import environ
+from logging.config import dictConfig
 
 from api.v1 import bp
 from core.flask import Flask
@@ -9,6 +10,22 @@ from flask_marshmallow import Marshmallow
 from werkzeug.utils import import_string
 
 redis = RedisExtension()
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://sys.stdout',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
 
 app = Flask(__name__)
 # instantiate config class to skip execution of SECRET_KEY related code at compile time
