@@ -20,7 +20,7 @@ def random_string(length):
 class UserService:
     password_hash_iterations = 100
 
-    def create(self, login, password) -> UserModel:
+    def create(self, login, password, commit=True) -> UserModel:
         """We hash the password here.
         :returns: Success or not"""
         hashed_password = crypt(
@@ -30,7 +30,8 @@ class UserService:
         )
         new_user = UserModel(login=login, password=hashed_password)
         db_engine.session.add(new_user)
-        db_engine.session.commit()
+        if commit:
+            db_engine.session.commit()
         return new_user
 
     def get(self, user_id) -> UserModel:
