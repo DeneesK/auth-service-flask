@@ -1,3 +1,5 @@
+№ <b>User authorization service.
+
 # Api Documentation
 
 After starting the project, you will have access to the project documentation: [localhost:5000/apidocs]( http://localhost:5000/apidocs)
