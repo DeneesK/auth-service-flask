@@ -1,4 +1,4 @@
-№ <b>User authorization service.
+# <b>User authorization service.
 
 # Api Documentation
 
